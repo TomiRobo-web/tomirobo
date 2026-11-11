@@ -1,0 +1,10 @@
+// Cloudflare Workers の設定。サーバー処理は持たず、dist/ の静的ファイルだけを配信する。
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "tomirobo-website",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

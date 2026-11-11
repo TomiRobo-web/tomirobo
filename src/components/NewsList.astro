@@ -1,0 +1,17 @@
+---
+import { formatDate, type News } from '../lib';
+interface Props { posts: News[] }
+const { posts } = Astro.props;
+---
+{posts.length === 0 ? (
+  <p class="placeholder">記事はまだありません。</p>
+) : (
+  <ul class="news-list">
+    {posts.map((post) => (
+      <li>
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        <a href={`/news/${post.id}/`}>{post.data.title}</a>
+      </li>
+    ))}
+  </ul>
+)}
