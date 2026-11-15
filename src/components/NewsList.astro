@@ -1,17 +1,23 @@
 ---
-import { formatDate, type News } from '../lib';
-interface Props { posts: News[] }
-const { posts } = Astro.props;
+import { displayDate, groupByFiscalYear, type News } from '../lib';
+interface Props { posts: News[]; groupByYear?: boolean }
+const { posts, groupByYear = false } = Astro.props;
+const groups = groupByYear ? groupByFiscalYear(posts) : [[0, posts] as [number, News[]]];
 ---
 {posts.length === 0 ? (
   <p class="placeholder">記事はまだありません。</p>
 ) : (
-  <ul class="news-list">
-    {posts.map((post) => (
-      <li>
-        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
-        <a href={`/news/${post.id}/`}>{post.data.title}</a>
-      </li>
-    ))}
-  </ul>
+  groups.map(([fy, items]) => (
+    <section>
+      {groupByYear && <h2 class="year">{fy}年度</h2>}
+      <ul class="news-list">
+        {items.map((post) => (
+          <li>
+            <time datetime={post.data.date.toISOString()}>{displayDate(post)}</time>
+            <a href={`/news/${post.id}/`}>{post.data.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))
 )}

@@ -8,4 +8,6 @@ export default defineConfig({
   site: 'https://tomirobo.toyamarobocon.workers.dev',
   output: 'static',
   trailingSlash: 'ignore',
+  // 記号（' " -- など）を勝手に書き換えない。旧サイト・esa の文章をそのまま表示するため
+  markdown: { smartypants: false },
 });

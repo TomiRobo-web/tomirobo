@@ -1,7 +1,64 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+// 本文は旧 Google Sites の Contact ページから移行（2026-11-15）
+const links = [
+  {
+    name: 'TomiRobo 公式メールアドレス',
+    href: 'mailto:toyamarobocon@gmail.com',
+    label: 'toyamarobocon@gmail.com',
+    note: 'イベント勧誘のお問い合わせやスポンサー企業様のご連絡などはこちらへ！',
+  },
+  {
+    name: '公式 X（Twitter）アカウント',
+    href: 'https://twitter.com/TomiRoboProject',
+    label: '@TomiRoboProject',
+    note: '大会の速報や、渉外・広報的なお知らせを広く発信しています！',
+  },
+  {
+    name: '日常 X（Twitter）アカウント',
+    href: 'https://twitter.com/TomiRobo_diary',
+    label: '@TomiRobo_diary',
+    note: '部室の様子や開発の裏側など、活動の日常をフランクに発信しています！',
+  },
+  {
+    name: '公式 Instagram アカウント',
+    href: 'https://www.instagram.com/tomirobo_project/',
+    label: '@tomirobo_project',
+    note: '渉外・広報的なお知らせを主に学生向けに発信しています！',
+  },
+];
 ---
 <BaseLayout title="CONTACT">
   <h1>CONTACT <small>お問い合わせ</small></h1>
-  <p class="placeholder">連絡先・SNS（現 Google Sites の Contact から移行。問い合わせ先は部の公式メール）</p>
+
+  <section>
+    <h2>公式リンク / SNS</h2>
+    <ul class="contact-list">
+      {links.map((l) => (
+        <li>
+          <h3><a href={l.href}>{l.name}</a></h3>
+          <p>{l.note}<br />（{l.label}）</p>
+        </li>
+      ))}
+    </ul>
+    <p>新規部員も募集中！メールはもちろん、各種SNSのDMでも受け付けています！まずは気軽に連絡してください！</p>
+  </section>
+
+  <section>
+    <h2>活動場所 / アクセス</h2>
+    <address>
+      〒930-8555<br />
+      富山県富山市五福3190<br />
+      富山大学 五福キャンパス 工学部<br />
+      創造工学センター<br />
+      ロボコンプロジェクトルーム
+    </address>
+    <img src="/images/pages/campus-map.png" alt="五福キャンパス工学部周辺の地図（創造工学センターの位置）" width="190" height="289" loading="lazy" />
+    <iframe
+      class="map"
+      title="創造工学センターの地図"
+      src="https://maps.google.com/maps?hl=ja&ll=36.694471,137.186591&q=36.694213,137.185749&z=18&output=embed"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </section>
 </BaseLayout>

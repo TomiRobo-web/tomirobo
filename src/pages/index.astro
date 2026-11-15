@@ -5,9 +5,19 @@ import { getPublishedNews } from '../lib';
 const latest = (await getPublishedNews()).slice(0, 5);
 ---
 <BaseLayout title="HOME">
-  <h1>TomiRobo</h1>
-  <p class="placeholder">トップの紹介文・メイン画像（制作時に作成）</p>
+  <h1>TomiRobo <small>富山大学ロボコンプロジェクト</small></h1>
+  <p>富山大学ロボコンプロジェクトの公式HPです！</p>
+  <p class="placeholder">メイン画像・キャッチコピー（デザイン時に作成）</p>
+
   <h2>新着情報</h2>
   <NewsList posts={latest} />
   <p><a href="/news/">NEWS 一覧へ</a></p>
+
+  <h2>TomiRoboについて</h2>
+  <ul>
+    <li><a href="/about/">ABOUT</a>：団体紹介と3つの班</li>
+    <li><a href="/join/">JOIN</a>：新入部員大募集中！</li>
+    <li><a href="/sponsor/">SPONSOR</a>：ご支援いただいている皆様</li>
+    <li><a href="/contact/">CONTACT</a>：連絡先・SNS・アクセス</li>
+  </ul>
 </BaseLayout>

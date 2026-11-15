@@ -16,5 +16,5 @@ const { tag, allTags, posts } = Astro.props;
 <BaseLayout title={`NEWS: ${tag}`}>
   <h1>NEWS <small>活動報告</small></h1>
   <TagFilter tags={allTags} current={tag} />
-  <NewsList posts={posts} />
+  <NewsList posts={posts} groupByYear />
 </BaseLayout>
