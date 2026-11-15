@@ -53,7 +53,10 @@ npx wrangler dev   # Cloudflare Workers と同じ仕組みで dist/ を配信し
 - `wrangler.jsonc` で `dist/` を Cloudflare Workers の Static Assets として配信します。サーバー処理はありません。
 - 存在しない URL には `404.html` を返します。
 - 正式公開までは全ページに `noindex` を入れています（`src/layouts/BaseLayout.astro`）。公開時に外します。
-- Cloudflare Workers Builds との接続は未設定です。
+- Cloudflare Workers Builds に接続済みです。`main` に push すると自動でビルド・公開されます。
+  - Worker名: `tomirobo`（`wrangler.jsonc` の `name` と必ず一致させる。違うとビルドが失敗する）
+  - 仮公開URL: https://tomirobo.toyamarobocon.workers.dev/
+  - Build command: `npm run build` / Deploy command: `npx wrangler deploy`
 
 ## 今後の予定（未実装）
 
