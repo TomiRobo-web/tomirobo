@@ -1,0 +1,6 @@
+# 改行コードを LF に統一する（Windows で作業しても差分が出ないように）
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.gif binary
+*.webp binary
