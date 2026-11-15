@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NewsList from '../components/NewsList.astro';
+import { getPublishedNews } from '../lib';
+const latest = (await getPublishedNews()).slice(0, 5);
+---
+<BaseLayout title="HOME">
+  <h1>TomiRobo</h1>
+  <p class="placeholder">トップの紹介文・メイン画像（制作時に作成）</p>
+  <h2>新着情報</h2>
+  <NewsList posts={latest} />
+  <p><a href="/news/">NEWS 一覧へ</a></p>
+</BaseLayout>

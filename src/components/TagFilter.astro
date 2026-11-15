@@ -1,0 +1,13 @@
+---
+// NEWS のタグ絞り込み。JavaScript を使わず、タグごとの静的ページへのリンクで実現する
+interface Props { tags: string[]; current?: string }
+const { tags, current } = Astro.props;
+---
+<ul class="tags" aria-label="タグで絞り込む">
+  <li><a href="/news/" aria-current={current === undefined ? 'page' : undefined}>すべて</a></li>
+  {tags.map((tag) => (
+    <li>
+      <a href={`/news/tags/${encodeURIComponent(tag)}/`} aria-current={current === tag ? 'page' : undefined}>{tag}</a>
+    </li>
+  ))}
+</ul>
