@@ -67,6 +67,13 @@ npx wrangler dev   # Cloudflare Workers と同じ仕組みで dist/ を配信し
   - 仮公開URL: https://tomirobo.toyamarobocon.workers.dev/
   - Build command: `npm run build` / Deploy command: `npx wrangler deploy`
 
+## プレビュー（公開前の確認）
+
+- `main` 以外のブランチに push すると、Cloudflare がプレビュー用にビルドします（設定 → ビルド → プレビューのベース →「プレビューブランチのビルド」がオン、プレビューコマンド `npx wrangler preview`）。
+- 結果は Cloudflare の Worker `tomirobo` の画面上部で「プロダクション」を「プレビュー」に切り替え、「デプロイ」タブで確認します。
+- プレビューの URL は `*-tomirobo.toyamarobocon.workers.dev` の形になります。
+- 内容を確認してから、GitHub のプルリクエストを `main` にマージすると本番に反映されます。
+
 ## 今後の予定（未実装）
 
 - esa の公開用カテゴリの記事を取り込んでプルリクエストにする同期処理（GitHub Actions）
