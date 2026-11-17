@@ -1,0 +1,9 @@
+---
+// ページの題。「英字ラベル＋日本語」の組（docs/designsystem/components/SectionHeading）
+interface Props { en: string; ja: string }
+const { en, ja } = Astro.props;
+---
+<h1 class="tr-heading tr-heading--page">
+  <span class="tr-heading__en">{en}</span>
+  <span class="tr-heading__ja">{ja}</span>
+</h1>

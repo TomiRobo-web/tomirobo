@@ -3,7 +3,7 @@
 富山大学ロボコンプロジェクト TomiRobo の公式サイトのソースです。
 Astro で静的サイトを作り、Cloudflare Workers（無料プラン）の Static Assets で配信します。
 
-> 現在は制作中です。ABOUT・JOIN・SPONSOR・CONTACT と NEWS の記事は旧 Google Sites から移行済み（2026-11-15）。デザインは仮です。
+> 現在は制作中です。ABOUT・JOIN・SPONSOR・CONTACT と NEWS の記事は旧 Google Sites から移行済み（2026-11-15）。デザインは `docs/designsystem/` のルール v0.1 を適用済み。
 
 - ソース: https://github.com/TomiRobo-web/tomirobo （Cloudflare Workers Builds はこのリポジトリにつながっています）
 
@@ -59,7 +59,7 @@ Node.js 22（`.node-version` 参照。Astro 7.4 は 22.23.4 以上が必要）�
 ```sh
 npm install
 npm run dev        # http://localhost:4321 で確認
-npm run build      # dist/ に静的ファイルを出力
+npm run build      # dist/ に静的ファイルを出力（先に docs/designsystem から CSS を作り直す）
 npx wrangler dev   # Cloudflare Workers と同じ仕組みで dist/ を配信して確認
 ```
 

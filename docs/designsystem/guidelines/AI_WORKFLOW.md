@@ -50,10 +50,11 @@ AI（Claude、Codex、ほかのモデル）と人が、同じ手順でサイト�
 
 | ルール | サイトのコード（`TomiRobo-web/tomirobo`） |
 |---|---|
-| `tokens.json` | `src/styles/tokens.css`（CSS 変数。値を写したもの） |
-| `components/bundle.css` | `src/styles/components.css`（同じ内容） |
+| `tokens.json` | `src/styles/tokens.css`（自動で作られる。手で直さない） |
+| `components/bundle.css` | `src/styles/components.css`（自動で写される。手で直さない） |
 | SiteHeader・フッター | `src/layouts/BaseLayout.astro`、メニューは `src/components/nav.ts` |
+| SectionHeading | `src/components/PageHeading.astro`（ページの題） |
 | NewsItem・Tag | `src/components/NewsList.astro`、`TagFilter.astro` |
 | Prose | `src/pages/news/[...slug].astro` の記事本文 |
 
-※ 2026-11-17 時点では、サイトはまだ仮のスタイル（`src/styles/global.css`）で、この対応は**これから作る**ものです。
+`npm run build`（または `npm run design`）のたびに、`scripts/sync-design.mjs` が `docs/designsystem/` から上の2つの CSS を作り直します。見た目の値を変えるときは、必ず `docs/designsystem/` 側を直してください。

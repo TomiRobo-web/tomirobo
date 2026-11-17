@@ -12,6 +12,21 @@
 | FrameCard | `tr-frame` | 強調したい箱（3つの班、JOIN への誘導）。1画面に2つまで（同じ並びの組は1つと数える） | 一覧の全項目を囲む、本文の囲み |
 | Prose | `tr-prose` | NEWS の記事本文（Markdown でも esa の HTML でも） | 固定ページのレイアウト |
 
+## ページ専用の小さな部品
+
+部品というほどではない、特定のページだけで使うクラスです。CSS は同じ `bundle.css` の末尾にあります。
+
+| クラス | 使う場所 |
+|---|---|
+| `tr-hero` | HOME の最初の画面（英字ラベル・コピー・導入文・主ボタン・ロゴ） |
+| `tr-lead` | 各ページの題の直後の導入文 |
+| `tr-band`・`tr-band--ai`・`tr-band__inner` | 区切りの帯。藍の帯は1ページに1か所まで |
+| `tr-logos` | SPONSOR の協賛企業ロゴの格子 |
+| `tr-contacts`・`tr-address`・`tr-map` | CONTACT の連絡先一覧・住所・地図 |
+| `tr-meta`・`tr-date` | 記事の日付・年度・執筆者 |
+| `tr-actions` | ボタンを並べる行 |
+| `tr-figure`・`tr-float-logo` | 固定ページの画像 |
+
 ## 決め方
 
 1. それは**移動や行動**か → 主な行動なら Button（主ボタンは1画面に1つ）、文中なら下線つきリンク。

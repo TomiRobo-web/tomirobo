@@ -1,22 +1,28 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
 // 本文は旧 Google Sites の Project・Contact ページの募集案内から移行（2026-11-15）
 ---
 <BaseLayout title="JOIN">
-  <h1>JOIN <small>メンバー募集</small></h1>
-
-  <p><strong>新入部員大募集中！</strong></p>
+  <PageHeading en="Join" ja="メンバー募集" />
+  <p class="tr-lead">新入部員大募集中！</p>
+  <div class="tr-text">
   <p>学部、学科、経験等問いません。文系でも問題なし！</p>
   <p>
     ロボコンに興味がある方、ロボットが好きな方、モノづくりをしてみたい方、などなど少しでも興味がある方は、創造工学センターを直接訪ねる、あるいはメールや各種SNSのDMにてお気軽にお問い合わせください！
   </p>
   <p>メールはもちろん、各種SNSのDMでも受け付けています！まずは気軽に連絡してください！</p>
 
-  <img class="wide-img" src="/images/pages/recruit-poster.png" alt="新入部員募集のポスター" width="1435" height="992" loading="lazy" />
+  </div>
+  <p class="tr-actions"><a class="tr-button tr-button--primary" href="/contact/">連絡先を見る <span class="tr-button__arrow">→</span></a></p>
 
-  <h2>活動内容</h2>
+  <img class="tr-figure" src="/images/pages/recruit-poster.png" alt="新入部員募集のポスター" width="1435" height="992" loading="lazy" />
+
+  <section class="tr-section tr-text">
+  <h2 class="tr-heading"><span class="tr-heading__en">Activity</span><span class="tr-heading__ja">活動内容</span></h2>
   <p>班ごとの活動は <a href="/about/">ABOUT</a>、これまでの活動は <a href="/news/">NEWS</a> をご覧ください。</p>
 
-  <h2>連絡先・活動場所</h2>
+  <h2 class="tr-heading"><span class="tr-heading__en">Contact</span><span class="tr-heading__ja">連絡先・活動場所</span></h2>
   <p><a href="/contact/">CONTACT</a> をご覧ください。</p>
+  </section>
 </BaseLayout>

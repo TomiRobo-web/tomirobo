@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
 ---
 <BaseLayout title="ページが見つかりません">
-  <h1>ページが見つかりません</h1>
-  <p><a href="/">トップへ戻る</a></p>
+  <PageHeading en="404" ja="ページが見つかりません" />
+  <p class="tr-lead">お探しのページは、移動したか、なくなった可能性があります。</p>
+  <p class="tr-actions"><a class="tr-button" href="/">トップへ戻る <span class="tr-button__arrow">→</span></a></p>
 </BaseLayout>

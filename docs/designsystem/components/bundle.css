@@ -82,3 +82,44 @@ a.tr-frame:hover .tr-frame__label, a.tr-frame:hover .tr-frame__text { color: var
 .tr-prose th, .tr-prose td { padding: var(--space-2); border: var(--border-thin) solid var(--line); text-align: left; }
 .tr-prose th { background: var(--paper-sub); }
 .tr-prose iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+
+/* ---- ページ専用の小さな部品（仕様は guidelines/COMPONENT_GUIDE.md の「ページ専用」） ---- */
+.tr-main { padding-block: var(--space-5) 0; }
+.tr-lead { max-width: var(--text-max); margin: 0 0 var(--space-4); color: var(--ink-sub); font: 500 18px/32px var(--font-sans); }
+.tr-date { color: var(--ink-muted); font: 400 14px/24px var(--font-mono); }
+.tr-meta { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: 0 0 var(--space-2); color: var(--ink-muted); font-size: 14px; line-height: 24px; }
+.tr-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+
+/* Hero（HOME だけ） */
+.tr-hero { display: grid; gap: var(--space-5); align-items: center; padding-block: var(--space-6); }
+.tr-hero__label { color: var(--ai); font: 500 12px/16px var(--font-mono); letter-spacing: 0.12em; }
+.tr-hero__copy { margin: var(--space-2) 0 var(--space-3); font: 900 32px/40px var(--font-sans); letter-spacing: 0.02em; }
+.tr-hero__logo { justify-self: center; width: 240px; }
+@media (min-width: 768px) {
+  .tr-hero { grid-template-columns: 1fr auto; padding-block: var(--space-7); }
+  .tr-hero__copy { font-size: 48px; line-height: 56px; }
+}
+
+/* 帯の中身 */
+.tr-band__inner { max-width: var(--content-max); margin-inline: auto; padding-inline: var(--space-3); }
+.tr-band p { max-width: var(--text-max); }
+.tr-main:has(> .tr-band:last-child) + .tr-footer { margin-top: 0; }
+
+/* ロゴの格子（SPONSOR） */
+.tr-logos { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); margin: 0; padding: 0; list-style: none; }
+.tr-logos li { padding: var(--space-3); border: var(--border-thin) solid var(--line); background: var(--paper); text-align: center; font-size: 14px; line-height: 24px; }
+.tr-logos img { display: block; width: 100%; height: 96px; margin-bottom: var(--space-2); object-fit: contain; }
+
+/* 連絡先の一覧（CONTACT） */
+.tr-contacts { margin: 0; padding: 0; list-style: none; border-top: var(--border-thin) solid var(--line); }
+.tr-contacts li { padding: var(--space-3) 0; border-bottom: var(--border-thin) solid var(--line); }
+.tr-contacts h3 { margin: 0; font: 700 18px/28px var(--font-sans); }
+.tr-contacts p { margin: 0; color: var(--ink-sub); }
+.tr-address { font-style: normal; }
+.tr-map { display: block; width: 100%; aspect-ratio: 16 / 9; margin-top: var(--space-3); border: var(--border-thin) solid var(--line); }
+.tr-figure { display: block; margin-block: var(--space-4); border: var(--border-thin) solid var(--line); }
+.tr-float-logo { float: right; width: 140px; margin: 0 0 var(--space-3) var(--space-3); }
+
+@media (max-width: 767px) {
+  .tr-heading--page .tr-heading__ja { font-size: 26px; line-height: 36px; }
+}

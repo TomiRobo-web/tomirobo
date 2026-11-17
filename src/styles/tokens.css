@@ -1,0 +1,33 @@
+/* 自動生成：docs/designsystem から scripts/sync-design.mjs が作る。手で直さない */
+:root {
+  --paper: #ffffff;
+  --paper-sub: #f4f5f6;
+  --ink: #111111;
+  --ink-sub: #4a4f54;
+  --ink-muted: #666c72;
+  --line: #c9ced3;
+  --line-strong: #8a9197;
+  --ai: #466d7f;
+  --ai-deep: #2f4c5a;
+  --ai-tint: #e4eff4;
+  --ai-light: #b9d3de;
+  --on-ink: #ffffff;
+  --on-ai: #ffffff;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+  --space-6: 64px;
+  --space-7: 96px;
+  --radius-none: 0;
+  --radius-sm: 2px;
+  --border-thin: 1px;
+  --border-bold: 2px;
+  --border-frame: 4px;
+  --content-max: 1040px;
+  --text-max: 720px;
+  --bp-wide: 768px;
+  --font-sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}

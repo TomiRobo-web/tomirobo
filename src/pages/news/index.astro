@@ -1,12 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeading from '../../components/PageHeading.astro';
 import NewsList from '../../components/NewsList.astro';
 import TagFilter from '../../components/TagFilter.astro';
 import { getPublishedNews, collectTags } from '../../lib';
 const posts = await getPublishedNews();
 ---
 <BaseLayout title="NEWS">
-  <h1>NEWS <small>活動報告</small></h1>
+  <PageHeading en="News" ja="活動報告" />
   <TagFilter tags={collectTags(posts)} />
   <NewsList posts={posts} groupByYear />
 </BaseLayout>

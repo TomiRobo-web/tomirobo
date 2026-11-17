@@ -11,21 +11,21 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 <BaseLayout title={post.data.title}>
-  <article class="post">
-    <p class="meta">
-      <time datetime={post.data.date.toISOString()}>{displayDate(post)}</time>
+  <article>
+    <p class="tr-meta">
+      <span class="tr-date">{displayDate(post)}</span>
       <span>{fiscalYear(post)}年度</span>
       {post.data.author && <span>{post.data.author}</span>}
     </p>
-    <h1>{post.data.title}</h1>
+    <h1 class="tr-heading tr-heading--page"><span class="tr-heading__ja">{post.data.title}</span></h1>
     {post.data.tags.length > 0 && (
-      <ul class="tags">
+      <ul class="tr-tags">
         {post.data.tags.map((tag) => (
-          <li><a href={`/news/tags/${encodeURIComponent(tag)}/`}>{tag}</a></li>
+          <li><a class="tr-tag" href={`/news/tags/${encodeURIComponent(tag)}/`}>{tag}</a></li>
         ))}
       </ul>
     )}
-    <div class="post-body"><Content /></div>
+    <div class="tr-prose tr-section"><Content /></div>
   </article>
-  <p><a href="/news/">NEWS 一覧へ</a></p>
+  <p class="tr-actions"><a class="tr-button" href="/news/">NEWS 一覧へ <span class="tr-button__arrow">→</span></a></p>
 </BaseLayout>

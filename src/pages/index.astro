@@ -1,23 +1,57 @@
 ---
+// HOME。骨格は docs/designsystem/guidelines/PAGE_PATTERNS.md
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NewsList from '../components/NewsList.astro';
 import { getPublishedNews } from '../lib';
 const latest = (await getPublishedNews()).slice(0, 5);
+const teams = [
+  { en: 'Mechanical', ja: '設計班', text: '3DCADで機構を設計し、工作機械で「ロボット」というカタチにします。' },
+  { en: 'Electrical', ja: '電装班', text: '回路基板の設計・製作と配線で、機体と制御の橋渡しをします。' },
+  { en: 'Control', ja: '制御班', text: 'プログラムで機体を動かし、大会で勝てるロボットに仕上げます。' },
+];
 ---
-<BaseLayout title="HOME">
-  <h1>TomiRobo <small>富山大学ロボコンプロジェクト</small></h1>
-  <p>富山大学ロボコンプロジェクトの公式HPです！</p>
-  <p class="placeholder">メイン画像・キャッチコピー（デザイン時に作成）</p>
+<BaseLayout title="HOME" wide>
+  <div class="tr-container">
+    <section class="tr-hero">
+      <div>
+        <span class="tr-hero__label">TOYAMA UNIV. ROBOCON PROJECT</span>
+        <h1 class="tr-hero__copy">想像超える“創造”を</h1>
+        <p class="tr-lead">富山大学ロボコンプロジェクト TomiRobo の公式サイトです。NHK学生ロボコンをはじめとする大会に向けて、設計・電装・制御の3つの班でロボットをつくっています。</p>
+        <p class="tr-actions">
+          <a class="tr-button tr-button--primary" href="/join/">メンバー募集を見る <span class="tr-button__arrow">→</span></a>
+        </p>
+      </div>
+      <img class="tr-hero__logo" src="/images/pages/tomirobo-logo.png" alt="TomiRobo のロゴ" width="385" height="400" />
+    </section>
 
-  <h2>新着情報</h2>
-  <NewsList posts={latest} />
-  <p><a href="/news/">NEWS 一覧へ</a></p>
+    <section class="tr-section">
+      <h2 class="tr-heading"><span class="tr-heading__en">News</span><span class="tr-heading__ja">新着情報</span></h2>
+      <NewsList posts={latest} />
+      <p class="tr-actions"><a class="tr-button" href="/news/">NEWS 一覧へ <span class="tr-button__arrow">→</span></a></p>
+    </section>
 
-  <h2>TomiRoboについて</h2>
-  <ul>
-    <li><a href="/about/">ABOUT</a>：団体紹介と3つの班</li>
-    <li><a href="/join/">JOIN</a>：新入部員大募集中！</li>
-    <li><a href="/sponsor/">SPONSOR</a>：ご支援いただいている皆様</li>
-    <li><a href="/contact/">CONTACT</a>：連絡先・SNS・アクセス</li>
-  </ul>
+    <section class="tr-section">
+      <h2 class="tr-heading"><span class="tr-heading__en">Teams</span><span class="tr-heading__ja">3つの班</span></h2>
+      <div class="tr-grid">
+        {teams.map((t) => (
+          <a class="tr-frame" href="/about/">
+            <span class="tr-frame__label">{t.en}</span>
+            <h3 class="tr-frame__title">{t.ja}</h3>
+            <p class="tr-frame__text">{t.text}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <section class="tr-band tr-band--ai">
+    <div class="tr-band__inner">
+      <h2 class="tr-heading"><span class="tr-heading__en">Sponsor / Contact</span><span class="tr-heading__ja">ご支援・お問い合わせ</span></h2>
+      <p>皆様のご支援が我々の活動の励みになります。イベントのご依頼や協賛のご相談は、公式メールアドレスまでご連絡ください。</p>
+      <p class="tr-actions">
+        <a class="tr-button" href="/sponsor/">協賛について <span class="tr-button__arrow">→</span></a>
+        <a class="tr-button" href="/contact/">お問い合わせ <span class="tr-button__arrow">→</span></a>
+      </p>
+    </div>
+  </section>
 </BaseLayout>

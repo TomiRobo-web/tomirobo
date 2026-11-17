@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
 // 本文は旧 Google Sites の Project ページから移行（2026-11-15）
 ---
 <BaseLayout title="ABOUT">
-  <h1>ABOUT <small>TomiRoboとは</small></h1>
+  <PageHeading en="About" ja="TomiRoboとは" />
 
-  <section>
-    <h2>富山大学ロボコンプロジェクト</h2>
-    <img class="logo-img" src="/images/pages/tomirobo-logo.png" alt="TomiRobo のロゴ" width="192" height="200" />
+  <section class="tr-section tr-text">
+    <h2 class="tr-heading"><span class="tr-heading__en">History</span><span class="tr-heading__ja">富山大学ロボコンプロジェクト</span></h2>
+    <img class="tr-float-logo" src="/images/pages/tomirobo-logo.png" alt="TomiRobo のロゴ" width="192" height="200" />
     <p>
       富山大学工学部における創造工学センターの竣工に伴い、学生の学習意欲の向上と創造性の育成を目的として、同センター運営委員会に「プロジェクト教育部門」が設置されました。
       この新規プロジェクトの一環として、2010年（平成22年度）に設立されたのが「富山大学ロボコンプロジェクト」です。
@@ -21,31 +22,42 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <p>これまでの大会の記録は <a href="/news/tags/%E5%A4%A7%E4%BC%9A/">NEWS の「大会」</a> から見られます。</p>
   </section>
 
-  <section>
-    <h2>3つの班</h2>
+  <section class="tr-section">
+    <h2 class="tr-heading"><span class="tr-heading__en">Teams</span><span class="tr-heading__ja">3つの班</span></h2>
     <p>基本的に「設計班」「電装班」「制御班」に分かれて活動しています。</p>
+    <div class="tr-grid">
 
-    <h3>設計班</h3>
-    <p>
+      <div class="tr-frame">
+        <span class="tr-frame__label">Mechanical</span>
+        <h3 class="tr-frame__title">設計班</h3>
+        <p class="tr-frame__text">
       3DCADソフトを用いてロボットの機構設計を行っています。
       また、旋盤やフライス盤など様々な工作機械の使い方も学ぶことで金属の加工技術も身につけます。
       アイデアや戦略を実現できる機構を構想し、それを実際に「ロボット」というカタチにする役割を担っている班です。
     </p>
+      </div>
 
-    <h3>電装班</h3>
-    <p>
+      <div class="tr-frame">
+        <span class="tr-frame__label">Electrical</span>
+        <h3 class="tr-frame__title">電装班</h3>
+        <p class="tr-frame__text">
       回路基板の制作やその配線作業を行っています。
       はんだ付けや加締めはもちろんのこと、EDAソフトを用いて電子回路・基板の設計開発などを行っています。
       設計班が制作した機体を制御班が動かせるようにするため、橋渡しとなる役割を担っている班です。
     </p>
+      </div>
 
-    <h3>制御班</h3>
-    <p>
+      <div class="tr-frame">
+        <span class="tr-frame__label">Control</span>
+        <h3 class="tr-frame__title">制御班</h3>
+        <p class="tr-frame__text">
       様々な開発環境でC言語やPythonなどを用いてプログラムを組むことで、ロボットの動作制御を行っています。
       また、センサーによる自動化処理やシミュレーションによる動作の最適化なども行っています。
       設計班が制作し、電装班によって動かせるようになった機体を実際に大会で勝利できるように仕上げ、ロボットを完成させる役割を担っている班です。
     </p>
+      </div>
+    </div>
   </section>
 
-  <p><a href="/join/">メンバー募集について</a></p>
+  <p class="tr-actions"><a class="tr-button tr-button--primary" href="/join/">メンバー募集について <span class="tr-button__arrow">→</span></a></p>
 </BaseLayout>

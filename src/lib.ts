@@ -33,10 +33,10 @@ export function groupByFiscalYear(posts: News[]): [number, News[]][] {
 }
 
 export function formatDate(d: Date): string {
-  return d.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Tokyo' });
+  return d.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Tokyo' }).replaceAll('/', '.');
 }
 
 /** 一覧・記事ページで表示する日付。推定日付は「日付不明」とする */
 export function displayDate(post: News): string {
-  return post.data.date_estimated ? `日付不明（${fiscalYear(post)}年度）` : formatDate(post.data.date);
+  return post.data.date_estimated ? '日付不明' : formatDate(post.data.date);
 }

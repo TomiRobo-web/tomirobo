@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
 // 本文は旧 Google Sites の Sponsor ページから移行（2026-11-15）。掲載順は旧サイトと同じ（五十音順）
 const sponsors = [
   { name: 'Dassault Systèmes SolidWorks 様', logo: 'sponsor-solidworks.png' },
@@ -11,10 +12,10 @@ const sponsors = [
 ];
 ---
 <BaseLayout title="SPONSOR">
-  <h1>SPONSOR <small>協賛について</small></h1>
-  <p>皆様のご支援が我々の活動の励みになります</p>
+  <PageHeading en="Sponsor" ja="協賛について" />
+  <p class="tr-lead">皆様のご支援が我々の活動の励みになります</p>
 
-  <ul class="sponsor-list">
+  <ul class="tr-logos">
     {sponsors.map((s) => (
       <li>
         <img src={`/images/pages/${s.logo}`} alt={`${s.name.replace(/ 様$/, '')} のロゴ`} loading="lazy" />
@@ -24,6 +25,9 @@ const sponsors = [
   </ul>
   <p>(五十音順)</p>
 
-  <h2>ご支援のお問い合わせ</h2>
+  <section class="tr-section tr-text">
+  <h2 class="tr-heading"><span class="tr-heading__en">Support</span><span class="tr-heading__ja">ご支援のお問い合わせ</span></h2>
   <p>ご協賛・ご支援に関するご連絡は <a href="/contact/">CONTACT</a> の公式メールアドレスまでお願いいたします。</p>
+  <p class="tr-actions"><a class="tr-button tr-button--primary" href="/contact/">お問い合わせ先を見る <span class="tr-button__arrow">→</span></a></p>
+  </section>
 </BaseLayout>
