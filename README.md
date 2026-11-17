@@ -7,6 +7,10 @@ Astro で静的サイトを作り、Cloudflare Workers（無料プラン）の S
 
 - ソース: https://github.com/TomiRobo-web/tomirobo （Cloudflare Workers Builds はこのリポジトリにつながっています）
 
+## デザインのルール
+
+見た目を変えるときは、先に `docs/designsystem/README.md` を読んでください（色・文字・余白・部品・ページの骨格・AI の作業手順）。AI 向けの入口は `AGENTS.md` です。
+
 ## ページ構成
 
 | URL | ページ | ファイル |
