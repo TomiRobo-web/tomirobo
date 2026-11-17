@@ -17,6 +17,14 @@ const news = defineCollection({
     esa_id: z.number().optional(),
     revision: z.number().optional(),
     draft: z.boolean().default(false),
+    // 執筆者（任意）。例: "伊藤優心（電装班）"
+    author: z.string().optional(),
+    // 何年度のチームの記事か（旧サイトの年別ページ）。未指定なら日付から年度を計算する
+    team_year: z.number().optional(),
+    // 旧 Google Sites から移した記事の元ページ
+    legacy_url: z.string().url().optional(),
+    // 旧サイトに日付がなく、本文などから推定した日付のとき true（一覧では「日付不明」と表示）
+    date_estimated: z.boolean().default(false),
   }),
 });
 

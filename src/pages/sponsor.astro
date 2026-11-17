@@ -1,7 +1,29 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+// 本文は旧 Google Sites の Sponsor ページから移行（2026-11-15）。掲載順は旧サイトと同じ（五十音順）
+const sponsors = [
+  { name: 'Dassault Systèmes SolidWorks 様', logo: 'sponsor-solidworks.png' },
+  { name: 'SMC株式会社 様', logo: 'sponsor-smc.png' },
+  { name: 'STマイクロエレクトロニクス 様', logo: 'sponsor-st.png' },
+  { name: '有限会社沖商店 様', logo: 'sponsor-oki-shouten.png' },
+  { name: '北越商工株式会社 様', logo: 'sponsor-hokuetsu-shoko.png' },
+  { name: '北陽電機株式会社 様', logo: 'sponsor-hokuyo.png' },
+];
 ---
 <BaseLayout title="SPONSOR">
   <h1>SPONSOR <small>協賛について</small></h1>
-  <p class="placeholder">協賛企業・団体の紹介、協賛のお願い（現 Google Sites の Sponsor から移行）</p>
+  <p>皆様のご支援が我々の活動の励みになります</p>
+
+  <ul class="sponsor-list">
+    {sponsors.map((s) => (
+      <li>
+        <img src={`/images/pages/${s.logo}`} alt={`${s.name.replace(/ 様$/, '')} のロゴ`} loading="lazy" />
+        <p>{s.name}</p>
+      </li>
+    ))}
+  </ul>
+  <p>(五十音順)</p>
+
+  <h2>ご支援のお問い合わせ</h2>
+  <p>ご協賛・ご支援に関するご連絡は <a href="/contact/">CONTACT</a> の公式メールアドレスまでお願いいたします。</p>
 </BaseLayout>

@@ -8,5 +8,5 @@ const posts = await getPublishedNews();
 <BaseLayout title="NEWS">
   <h1>NEWS <small>活動報告</small></h1>
   <TagFilter tags={collectTags(posts)} />
-  <NewsList posts={posts} />
+  <NewsList posts={posts} groupByYear />
 </BaseLayout>

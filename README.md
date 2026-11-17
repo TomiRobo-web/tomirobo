@@ -3,7 +3,7 @@
 富山大学ロボコンプロジェクト TomiRobo の公式サイトのソースです。
 Astro で静的サイトを作り、Cloudflare Workers（無料プラン）の Static Assets で配信します。
 
-> 現在は試作段階です。各ページの本文は仮の文章です。`src/content/news/sample-*.md` は正式公開前に削除します。
+> 現在は制作中です。ABOUT・JOIN・SPONSOR・CONTACT と NEWS の記事は旧 Google Sites から移行済み（2026-11-15）。デザインは仮です。
 
 ## ページ構成
 
@@ -35,7 +35,16 @@ tags: ["大会"]
 
 - `tags` に書いた言葉がそのままタグになり、絞り込みページが自動で作られます。大会の記事には `大会` を付けます。
 - `draft: true` にすると公開されません。
+- `author` に執筆者（例: `"伊藤優心（電装班）"`）を書くと記事ページに表示されます。
+- `team_year` は何年度のチームの記事か。省略すると日付から年度（4月始まり）を計算します。NEWS 一覧はこの年度ごとにまとまります。
 - `source: esa` の記事は esa から自動で取り込んだ記事です（予定・未実装）。esa 側で直してください。こちらで直しても次の取り込みで上書きされます。
+
+## 旧 Google Sites から移した記事
+
+- `src/content/news/legacy/` は旧サイトの Activity（年別ページ）と Tech Blog から移した記事です。画像は `public/images/news/legacy/` にあります。
+- `legacy_url` は元のページです。
+- 旧サイトで日付がなかった記事は、本文の日付か年度の4月1日を仮の日付にして `date_estimated: true` を付けています。一覧では「日付不明（○○年度）」と表示されます。
+- 「大会」タグは記事タイトルから自動で付けました。間違いがあれば `tags` を直してください。
 
 ## 手元で動かす
 
@@ -57,6 +66,13 @@ npx wrangler dev   # Cloudflare Workers と同じ仕組みで dist/ を配信し
   - Worker名: `tomirobo`（`wrangler.jsonc` の `name` と必ず一致させる。違うとビルドが失敗する）
   - 仮公開URL: https://tomirobo.toyamarobocon.workers.dev/
   - Build command: `npm run build` / Deploy command: `npx wrangler deploy`
+
+## プレビュー（公開前の確認）
+
+- `main` 以外のブランチに push すると、Cloudflare がプレビュー用にビルドします（設定 → ビルド → プレビューのベース →「プレビューブランチのビルド」がオン、プレビューコマンド `npx wrangler preview`）。
+- 結果は Cloudflare の Worker `tomirobo` の画面上部で「プロダクション」を「プレビュー」に切り替え、「デプロイ」タブで確認します。
+- プレビューの URL は `*-tomirobo.toyamarobocon.workers.dev` の形になります。
+- 内容を確認してから、GitHub のプルリクエストを `main` にマージすると本番に反映されます。
 
 ## 今後の予定（未実装）
 
