@@ -9,6 +9,7 @@
   --line-strong: #8a9197;
   --ai: #466d7f;
   --ai-deep: #2f4c5a;
+  --ai-mid: #3d6273;
   --ai-tint: #e4eff4;
   --ai-light: #b9d3de;
   --on-ink: #ffffff;
@@ -24,10 +25,11 @@
   --radius-sm: 2px;
   --border-thin: 1px;
   --border-bold: 2px;
-  --border-frame: 4px;
+  --border-frame: 6px;
   --content-max: 1040px;
   --text-max: 720px;
   --bp-wide: 768px;
-  --font-sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  --font-display: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  --font-sans: "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }

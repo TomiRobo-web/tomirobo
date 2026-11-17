@@ -9,8 +9,10 @@ interface Props {
   description?: string;
   /** true のとき main を幅いっぱいにする（帯を端まで伸ばすページ用） */
   wide?: boolean;
+  /** true のとき、ヘッダーを濃い藍にして main の上の余白をなくす（HOME のヒーロー用） */
+  onAi?: boolean;
 }
-const { title, description = '富山大学ロボコンプロジェクト TomiRobo の公式サイト', wide = false } = Astro.props;
+const { title, description = '富山大学ロボコンプロジェクト TomiRobo の公式サイト', wide = false, onAi = false } = Astro.props;
 const pageTitle = title === 'HOME' ? 'TomiRobo | 富山大学ロボコンプロジェクト' : `${title} | TomiRobo`;
 const current = Astro.url.pathname;
 const isCurrent = (href: string) =>
@@ -28,13 +30,13 @@ const menu = NAV.filter((item) => item.href !== '/');
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap"
       rel="stylesheet"
     />
     <title>{pageTitle}</title>
   </head>
   <body>
-    <header class="tr-header">
+    <header class:list={['tr-header', { 'tr-header--on-ai': onAi }]}>
       <div class="tr-header__inner">
         <a class="tr-header__logo" href="/">
           <img src="/images/pages/tomirobo-logo.png" alt="" width="40" height="40" />TomiRobo
@@ -53,7 +55,7 @@ const menu = NAV.filter((item) => item.href !== '/');
         </nav>
       </div>
     </header>
-    <main class:list={['tr-main', { 'tr-container': !wide }]}>
+    <main class:list={['tr-main', { 'tr-container': !wide, 'tr-main--flush': onAi }]}>
       <slot />
     </main>
     <footer class="tr-footer">

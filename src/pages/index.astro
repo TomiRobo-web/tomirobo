@@ -2,6 +2,7 @@
 // HOME。骨格は docs/designsystem/guidelines/PAGE_PATTERNS.md
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NewsList from '../components/NewsList.astro';
+import Gear from '../components/Gear.astro';
 import { getPublishedNews } from '../lib';
 const latest = (await getPublishedNews()).slice(0, 5);
 const teams = [
@@ -10,20 +11,24 @@ const teams = [
   { en: 'Control', ja: '制御班', text: 'プログラムで機体を動かし、大会で勝てるロボットに仕上げます。' },
 ];
 ---
-<BaseLayout title="HOME" wide>
-  <div class="tr-container">
-    <section class="tr-hero">
+<BaseLayout title="HOME" wide onAi>
+  <section class="tr-hero">
+    <Gear class="tr-hero__gear" />
+    <div class="tr-hero__inner">
       <div>
-        <span class="tr-hero__label">TOYAMA UNIV. ROBOCON PROJECT</span>
-        <h1 class="tr-hero__copy">想像超える“創造”を</h1>
+        <span class="tr-hero__label">TOYAMA UNIV. ROBOCON PROJECT ／ SINCE 2010</span>
+        <h1 class="tr-hero__copy">想像超える<br />“創造”を</h1>
         <p class="tr-lead">富山大学ロボコンプロジェクト TomiRobo の公式サイトです。NHK学生ロボコンをはじめとする大会に向けて、設計・電装・制御の3つの班でロボットをつくっています。</p>
         <p class="tr-actions">
-          <a class="tr-button tr-button--primary" href="/join/">メンバー募集を見る <span class="tr-button__arrow">→</span></a>
+          <a class="tr-button tr-button--on-ai" href="/join/">メンバー募集を見る <span class="tr-button__arrow">→</span></a>
+          <a class="tr-button tr-button--ghost-on-ai" href="/news/">活動報告 <span class="tr-button__arrow">→</span></a>
         </p>
       </div>
       <img class="tr-hero__logo" src="/images/pages/tomirobo-logo.png" alt="TomiRobo のロゴ" width="385" height="400" />
-    </section>
+    </div>
+  </section>
 
+  <div class="tr-container">
     <section class="tr-section">
       <h2 class="tr-heading"><span class="tr-heading__en">News</span><span class="tr-heading__ja">新着情報</span></h2>
       <NewsList posts={latest} />
@@ -35,6 +40,7 @@ const teams = [
       <div class="tr-grid">
         {teams.map((t) => (
           <a class="tr-frame" href="/about/">
+            <Gear class="tr-frame__gear" />
             <span class="tr-frame__label">{t.en}</span>
             <h3 class="tr-frame__title">{t.ja}</h3>
             <p class="tr-frame__text">{t.text}</p>

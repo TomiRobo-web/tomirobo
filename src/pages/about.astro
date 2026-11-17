@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeading from '../components/PageHeading.astro';
+import Gear from '../components/Gear.astro';
 // 本文は旧 Google Sites の Project ページから移行（2026-11-15）
 ---
 <BaseLayout title="ABOUT">
@@ -28,6 +29,7 @@ import PageHeading from '../components/PageHeading.astro';
     <div class="tr-grid">
 
       <div class="tr-frame">
+        <Gear class="tr-frame__gear" />
         <span class="tr-frame__label">Mechanical</span>
         <h3 class="tr-frame__title">設計班</h3>
         <p class="tr-frame__text">
@@ -38,6 +40,7 @@ import PageHeading from '../components/PageHeading.astro';
       </div>
 
       <div class="tr-frame">
+        <Gear class="tr-frame__gear" />
         <span class="tr-frame__label">Electrical</span>
         <h3 class="tr-frame__title">電装班</h3>
         <p class="tr-frame__text">
@@ -48,6 +51,7 @@ import PageHeading from '../components/PageHeading.astro';
       </div>
 
       <div class="tr-frame">
+        <Gear class="tr-frame__gear" />
         <span class="tr-frame__label">Control</span>
         <h3 class="tr-frame__title">制御班</h3>
         <p class="tr-frame__text">
