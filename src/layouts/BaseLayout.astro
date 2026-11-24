@@ -11,8 +11,32 @@ interface Props {
   wide?: boolean;
   /** true のとき、ヘッダーを濃い藍にして main の上の余白をなくす（HOME のヒーロー用） */
   onAi?: boolean;
+  /** SNS で共有されたときの種類。記事ページだけ article にする */
+  ogType?: 'website' | 'article';
+  /** SNS で共有されたときの画像（public/ からのパス） */
+  ogImage?: string;
 }
-const { title, description = '富山大学ロボコンプロジェクト TomiRobo の公式サイト', wide = false, onAi = false } = Astro.props;
+const DEFAULT_OG_IMAGE = '/images/ogp.png';
+const { title, description, wide = false, onAi = false, ogType = 'website', ogImage = DEFAULT_OG_IMAGE } = Astro.props;
+
+// description を渡さないページの説明文（検索結果・SNS の共有に出る）。キーは末尾の / を除いた URL
+const DESCRIPTIONS: Record<string, string> = {
+  '/': '富山大学ロボコンプロジェクト TomiRobo の公式サイトです。NHK学生ロボコンをはじめとする大会に向けて、設計・電装・制御の3つの班でロボットをつくっています。',
+  '/about': '富山大学ロボコンプロジェクト TomiRobo の紹介です。2010年の設立からの歩みと、設計班・電装班・制御班の活動をご覧いただけます。',
+  '/news': 'TomiRobo（富山大学ロボコンプロジェクト）の活動報告です。大会への出場やロボットの製作など、日々の活動をお知らせします。',
+  '/join': 'TomiRobo（富山大学ロボコンプロジェクト）のメンバー募集のご案内です。学部、学科、経験は問いません。',
+  '/sponsor': 'TomiRobo（富山大学ロボコンプロジェクト）をご支援いただいている企業様のご紹介と、協賛のご案内です。',
+  '/contact': 'TomiRobo（富山大学ロボコンプロジェクト）へのお問い合わせ先、公式 SNS、活動場所のご案内です。',
+};
+function defaultDescription(pathname: string): string {
+  const path = decodeURIComponent(pathname).replace(/\/+$/, '') || '/';
+  const tag = path.match(/^\/news\/tags\/(.+)$/)?.[1];
+  if (tag) return `TomiRobo（富山大学ロボコンプロジェクト）の活動報告のうち、「${tag}」の記事の一覧です。`;
+  return DESCRIPTIONS[path] ?? '富山大学ロボコンプロジェクト TomiRobo の公式サイト';
+}
+const pageDescription = description || defaultDescription(Astro.url.pathname);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
 const pageTitle = title === 'HOME' ? 'TomiRobo | 富山大学ロボコンプロジェクト' : `${title} | TomiRobo`;
 const current = Astro.url.pathname;
 const isCurrent = (href: string) =>
@@ -24,9 +48,30 @@ const menu = NAV.filter((item) => item.href !== '/');
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
+    <meta name="description" content={pageDescription} />
     <!-- 正式公開まで検索エンジンに載せない。公開時にこの行を消す -->
     <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="TomiRobo" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    {ogImage === DEFAULT_OG_IMAGE && (
+      <>
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+      </>
+    )}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImageURL} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

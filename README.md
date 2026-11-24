@@ -84,5 +84,4 @@ npx wrangler dev   # Cloudflare Workers と同じ仕組みで dist/ を配信し
 
 - esa の公開用カテゴリの記事を取り込んでプルリクエストにする同期処理（GitHub Actions）
 - 固定ページの編集画面（Pages CMS）
-- デザイン（Design System）と既存 Google Sites からの内容の移行
 - 大学の旧URLからの転送
