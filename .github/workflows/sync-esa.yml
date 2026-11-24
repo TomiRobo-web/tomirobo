@@ -1,0 +1,130 @@
+# esa の「公開用」カテゴリの記事を取り込み、プルリクエストにする。設定と運用は docs/esa-sync.md を参照。
+name: esa 同期
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      allow_empty:
+        description: 公開対象が0件でも実行し、取り込み済みの esa 記事をすべて消す
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: esa-sync
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  SYNC_BRANCH: esa-sync/auto
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: 設定の確認
+        id: config
+        env:
+          ESA_ACCESS_TOKEN: ${{ secrets.ESA_ACCESS_TOKEN }}
+          ESA_TEAM: ${{ vars.ESA_TEAM }}
+        run: |
+          if [ -z "$ESA_ACCESS_TOKEN" ] || [ -z "$ESA_TEAM" ]; then
+            echo "::notice::esa 同期は未設定のためスキップしました。Settings → Secrets and variables → Actions で Secrets の ESA_ACCESS_TOKEN と Variables の ESA_TEAM を設定してください（docs/esa-sync.md）"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.config.outputs.ready == 'true'
+        with:
+          node-version-file: '.node-version'
+          # Astro が 22 系の新しい版を必要とするため、ランナーに入っている古い版を使わない
+          check-latest: true
+
+      - name: 依存パッケージを入れる
+        if: steps.config.outputs.ready == 'true'
+        run: npm ci
+
+      - name: esa から取り込む
+        if: steps.config.outputs.ready == 'true'
+        env:
+          ESA_ACCESS_TOKEN: ${{ secrets.ESA_ACCESS_TOKEN }}
+          ESA_TEAM: ${{ vars.ESA_TEAM }}
+          ESA_PUBLIC_CATEGORY: ${{ vars.ESA_PUBLIC_CATEGORY || '公開用' }}
+          ESA_ALLOW_EMPTY: ${{ inputs.allow_empty || 'false' }}
+        run: node scripts/sync-esa.mjs
+
+      - name: 変更の有無を調べる
+        id: changes
+        if: steps.config.outputs.ready == 'true'
+        run: |
+          status="$(git status --porcelain -- src/content/news/esa public/images/news/esa)"
+          if [ -n "$status" ]; then
+            echo "$status"
+            echo "result=changed" >> "$GITHUB_OUTPUT"
+          else
+            echo "main との差はありません"
+            echo "result=same" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: ビルドできるか確かめる
+        if: steps.changes.outputs.result == 'changed'
+        run: npm run build
+
+      - name: プルリクエストを作る・更新する
+        if: steps.changes.outputs.result == 'changed'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -C "$SYNC_BRANCH"
+          git add -A -- src/content/news/esa public/images/news/esa
+          git commit -m 'esa の公開記事を同期'
+
+          remote="$(git rev-parse --verify --quiet "refs/remotes/origin/$SYNC_BRANCH" || true)"
+          if [ -n "$remote" ] && git diff --quiet "$remote" HEAD; then
+            echo "$SYNC_BRANCH は最新です"
+          else
+            git push --force-with-lease="refs/heads/$SYNC_BRANCH:$remote" origin "HEAD:refs/heads/$SYNC_BRANCH"
+          fi
+
+          pr="$(gh pr list --head "$SYNC_BRANCH" --base main --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$pr" ]; then
+            echo "既存のプルリクエスト #$pr に反映済みです"
+          else
+            {
+              echo 'esa の公開用カテゴリの記事を自動で取り込みました。マージすると本番に公開されます。'
+              echo
+              echo '- 公開してよい内容か（個人情報・未公開情報・写真）を「Files changed」で確認してください。'
+              echo '- 直すときは esa 側の記事を直してください。このブランチは次の同期で上書きされます。'
+              echo '- 運用のしかた: `docs/esa-sync.md`'
+            } > "$RUNNER_TEMP/pr-body.md"
+            gh pr create --base main --head "$SYNC_BRANCH" --title 'esa の公開記事を同期' --body-file "$RUNNER_TEMP/pr-body.md"
+          fi
+
+      # マージ前に esa 側で公開が取り消されたとき、古い内容の PR が残って誤ってマージされるのを防ぐ
+      - name: 不要になったプルリクエストを閉じる
+        if: steps.changes.outputs.result == 'same'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr="$(gh pr list --head "$SYNC_BRANCH" --base main --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$pr" ]; then
+            gh pr close "$pr" --delete-branch --comment 'esa の内容が main と同じになったため、自動で閉じました。'
+          fi

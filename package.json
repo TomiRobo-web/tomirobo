@@ -8,7 +8,9 @@
     "dev": "node scripts/sync-design.mjs && astro dev",
     "build": "node scripts/sync-design.mjs && astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "sync:esa": "node scripts/sync-esa.mjs",
+    "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
     "astro": "^7.4.10"
