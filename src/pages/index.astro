@@ -4,42 +4,38 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import NewsList from '../components/NewsList.astro';
 import Gear from '../components/Gear.astro';
 import { getPublishedNews } from '../lib';
+import page from '../data/pages/home.json';
 const latest = (await getPublishedNews()).slice(0, 5);
-const teams = [
-  { en: 'Mechanical', ja: '設計班', text: '3DCADで機構を設計し、工作機械で「ロボット」というカタチにします。' },
-  { en: 'Electrical', ja: '電装班', text: '回路基板の設計・製作と配線で、機体と制御の橋渡しをします。' },
-  { en: 'Control', ja: '制御班', text: 'プログラムで機体を動かし、大会で勝てるロボットに仕上げます。' },
-];
 ---
 <BaseLayout title="HOME" wide onAi>
   <section class="tr-hero">
     <Gear class="tr-hero__gear" />
     <div class="tr-hero__inner">
       <div>
-        <span class="tr-hero__label">TOYAMA UNIV. ROBOCON PROJECT ／ SINCE 2010</span>
-        <h1 class="tr-hero__copy">想像超える<br />“創造”を</h1>
-        <p class="tr-lead">富山大学ロボコンプロジェクト TomiRobo の公式サイトです。NHK学生ロボコンをはじめとする大会に向けて、設計・電装・制御の3つの班でロボットをつくっています。</p>
+        <span class="tr-hero__label">{page.hero.label}</span>
+        <h1 class="tr-hero__copy">{page.hero.copyLines.map((line, i) => (<>{i > 0 && <br />}{line}</>))}</h1>
+        <p class="tr-lead">{page.hero.lead}</p>
         <p class="tr-actions">
-          <a class="tr-button tr-button--on-ai" href="/join/">メンバー募集を見る <span class="tr-button__arrow">→</span></a>
-          <a class="tr-button tr-button--ghost-on-ai" href="/news/">活動報告 <span class="tr-button__arrow">→</span></a>
+          <a class="tr-button tr-button--on-ai" href={page.hero.primaryAction.href}>{page.hero.primaryAction.label} <span class="tr-button__arrow">→</span></a>
+          <a class="tr-button tr-button--ghost-on-ai" href={page.hero.secondaryAction.href}>{page.hero.secondaryAction.label} <span class="tr-button__arrow">→</span></a>
         </p>
       </div>
-      <img class="tr-hero__logo" src="/images/pages/tomirobo-logo.png" alt="TomiRobo のロゴ" width="385" height="400" />
+      <img class="tr-hero__logo" src={page.hero.logo.src} alt={page.hero.logo.alt} width={page.hero.logo.width} height={page.hero.logo.height} />
     </div>
   </section>
 
   <div class="tr-container">
     <section class="tr-section">
-      <h2 class="tr-heading"><span class="tr-heading__en">News</span><span class="tr-heading__ja">新着情報</span></h2>
+      <h2 class="tr-heading"><span class="tr-heading__en">{page.newsSection.en}</span><span class="tr-heading__ja">{page.newsSection.ja}</span></h2>
       <NewsList posts={latest} />
-      <p class="tr-actions"><a class="tr-button" href="/news/">NEWS 一覧へ <span class="tr-button__arrow">→</span></a></p>
+      <p class="tr-actions"><a class="tr-button" href={page.newsSection.moreHref}>{page.newsSection.moreLabel} <span class="tr-button__arrow">→</span></a></p>
     </section>
 
     <section class="tr-section">
-      <h2 class="tr-heading"><span class="tr-heading__en">Teams</span><span class="tr-heading__ja">3つの班</span></h2>
+      <h2 class="tr-heading"><span class="tr-heading__en">{page.teamsSection.en}</span><span class="tr-heading__ja">{page.teamsSection.ja}</span></h2>
       <div class="tr-grid">
-        {teams.map((t) => (
-          <a class="tr-frame" href="/about/">
+        {page.teamsSection.teams.map((t) => (
+          <a class="tr-frame" href={t.href}>
             <Gear class="tr-frame__gear" />
             <span class="tr-frame__label">{t.en}</span>
             <h3 class="tr-frame__title">{t.ja}</h3>
@@ -52,11 +48,12 @@ const teams = [
 
   <section class="tr-band tr-band--ai">
     <div class="tr-band__inner">
-      <h2 class="tr-heading"><span class="tr-heading__en">Sponsor / Contact</span><span class="tr-heading__ja">ご支援・お問い合わせ</span></h2>
-      <p>皆様のご支援が我々の活動の励みになります。イベントのご依頼や協賛のご相談は、公式メールアドレスまでご連絡ください。</p>
+      <h2 class="tr-heading"><span class="tr-heading__en">{page.band.en}</span><span class="tr-heading__ja">{page.band.ja}</span></h2>
+      <p>{page.band.text}</p>
       <p class="tr-actions">
-        <a class="tr-button" href="/sponsor/">協賛について <span class="tr-button__arrow">→</span></a>
-        <a class="tr-button" href="/contact/">お問い合わせ <span class="tr-button__arrow">→</span></a>
+        {page.band.actions.map((action) => (
+          <a class="tr-button" href={action.href}>{action.label} <span class="tr-button__arrow">→</span></a>
+        ))}
       </p>
     </div>
   </section>

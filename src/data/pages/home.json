@@ -1,0 +1,69 @@
+{
+  "hero": {
+    "label": "TOYAMA UNIV. ROBOCON PROJECT ／ SINCE 2010",
+    "copyLines": [
+      "想像超える",
+      "“創造”を"
+    ],
+    "lead": "富山大学ロボコンプロジェクト TomiRobo の公式サイトです。NHK学生ロボコンをはじめとする大会に向けて、設計・電装・制御の3つの班でロボットをつくっています。",
+    "primaryAction": {
+      "label": "メンバー募集を見る",
+      "href": "/join/"
+    },
+    "secondaryAction": {
+      "label": "活動報告",
+      "href": "/news/"
+    },
+    "logo": {
+      "src": "/images/pages/tomirobo-logo.png",
+      "alt": "TomiRobo のロゴ",
+      "width": 385,
+      "height": 400
+    }
+  },
+  "newsSection": {
+    "en": "News",
+    "ja": "新着情報",
+    "moreLabel": "NEWS 一覧へ",
+    "moreHref": "/news/"
+  },
+  "teamsSection": {
+    "en": "Teams",
+    "ja": "3つの班",
+    "teams": [
+      {
+        "en": "Mechanical",
+        "ja": "設計班",
+        "text": "3DCADで機構を設計し、工作機械で「ロボット」というカタチにします。",
+        "href": "/about/"
+      },
+      {
+        "en": "Electrical",
+        "ja": "電装班",
+        "text": "回路基板の設計・製作と配線で、機体と制御の橋渡しをします。",
+        "href": "/about/"
+      },
+      {
+        "en": "Control",
+        "ja": "制御班",
+        "text": "プログラムで機体を動かし、大会で勝てるロボットに仕上げます。",
+        "href": "/about/"
+      }
+    ]
+  },
+  "band": {
+    "en": "Sponsor / Contact",
+    "ja": "ご支援・お問い合わせ",
+    "text": "皆様のご支援が我々の活動の励みになります。イベントのご依頼や協賛のご相談は、公式メールアドレスまでご連絡ください。",
+    "actions": [
+      {
+        "label": "協賛について",
+        "href": "/sponsor/"
+      },
+      {
+        "label": "お問い合わせ",
+        "href": "/contact/"
+      }
+    ]
+  }
+}

@@ -1,64 +1,35 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeading from '../components/PageHeading.astro';
+import page from '../data/pages/contact.json';
 // 本文は旧 Google Sites の Contact ページから移行（2026-11-15）
-const links = [
-  {
-    name: 'TomiRobo 公式メールアドレス',
-    href: 'mailto:toyamarobocon@gmail.com',
-    label: 'toyamarobocon@gmail.com',
-    note: 'イベント勧誘のお問い合わせやスポンサー企業様のご連絡などはこちらへ！',
-  },
-  {
-    name: '公式 X（Twitter）アカウント',
-    href: 'https://twitter.com/TomiRoboProject',
-    label: '@TomiRoboProject',
-    note: '大会の速報や、渉外・広報的なお知らせを広く発信しています！',
-  },
-  {
-    name: '日常 X（Twitter）アカウント',
-    href: 'https://twitter.com/TomiRobo_diary',
-    label: '@TomiRobo_diary',
-    note: '部室の様子や開発の裏側など、活動の日常をフランクに発信しています！',
-  },
-  {
-    name: '公式 Instagram アカウント',
-    href: 'https://www.instagram.com/tomirobo_project/',
-    label: '@tomirobo_project',
-    note: '渉外・広報的なお知らせを主に学生向けに発信しています！',
-  },
-];
 ---
 <BaseLayout title="CONTACT">
-  <PageHeading en="Contact" ja="お問い合わせ" />
+  <PageHeading en={page.heading.en} ja={page.heading.ja} />
 
   <section class="tr-section tr-text">
-    <h2 class="tr-heading"><span class="tr-heading__en">Links</span><span class="tr-heading__ja">公式リンク / SNS</span></h2>
+    <h2 class="tr-heading"><span class="tr-heading__en">{page.linksSection.en}</span><span class="tr-heading__ja">{page.linksSection.ja}</span></h2>
     <ul class="tr-contacts">
-      {links.map((l) => (
+      {page.links.map((l) => (
         <li>
           <h3><a href={l.href}>{l.name}</a></h3>
           <p>{l.note}<br />（{l.label}）</p>
         </li>
       ))}
     </ul>
-    <p>新規部員も募集中！メールはもちろん、各種SNSのDMでも受け付けています！まずは気軽に連絡してください！</p>
+    <p>{page.recruitNote}</p>
   </section>
 
   <section class="tr-section tr-text">
-    <h2 class="tr-heading"><span class="tr-heading__en">Access</span><span class="tr-heading__ja">活動場所 / アクセス</span></h2>
+    <h2 class="tr-heading"><span class="tr-heading__en">{page.accessSection.en}</span><span class="tr-heading__ja">{page.accessSection.ja}</span></h2>
     <address class="tr-address">
-      〒930-8555<br />
-      富山県富山市五福3190<br />
-      富山大学 五福キャンパス 工学部<br />
-      創造工学センター<br />
-      ロボコンプロジェクトルーム
+      {page.addressLines.map((line, i) => (<>{i > 0 && <br />}{line}</>))}
     </address>
-    <img class="tr-figure" src="/images/pages/campus-map.png" alt="五福キャンパス工学部周辺の地図（創造工学センターの位置）" width="190" height="289" loading="lazy" />
+    <img class="tr-figure" src={page.campusMap.src} alt={page.campusMap.alt} width={page.campusMap.width} height={page.campusMap.height} loading="lazy" />
     <iframe
       class="tr-map"
-      title="創造工学センターの地図"
-      src="https://maps.google.com/maps?hl=ja&ll=36.694471,137.186591&q=36.694213,137.185749&z=18&output=embed"
+      title={page.googleMap.title}
+      src={page.googleMap.embedUrl}
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"></iframe>
   </section>

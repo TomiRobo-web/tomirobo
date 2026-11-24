@@ -1,0 +1,662 @@
+media:
+  - name: pages_images
+    label: 固定ページ画像
+    input: public/images/pages
+    output: /images/pages
+    categories: [image]
+  - name: news_images
+    label: NEWS 画像
+    input: public/images/news/uploads
+    output: /images/news/uploads
+    categories: [image]
+
+content:
+  - name: news
+    label: NEWS（手動記事）
+    type: collection
+    path: src/content/news
+    subfolders: false
+    format: yaml-frontmatter
+    filename: '{year}-{month}-{day}-{primary}.md'
+    view:
+      fields: [title, date, tags, draft]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: タイトル
+        type: string
+        required: true
+      - name: date
+        label: 公開日
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: tags
+        label: タグ
+        type: string
+        list: true
+        required: false
+      - name: author
+        label: 執筆者
+        type: string
+        required: false
+      - name: team_year
+        label: 年度（任意・省略時は日付から自動計算）
+        type: number
+        required: false
+      - name: draft
+        label: 下書き（オンにすると非公開）
+        type: boolean
+        default: false
+      - name: body
+        label: 本文
+        type: rich-text
+        options:
+          format: markdown
+          media: news_images
+
+  - name: page_home
+    label: 固定ページ：HOME
+    type: file
+    path: src/data/pages/home.json
+    format: json
+    fields:
+      - name: hero
+        label: ヒーロー
+        type: object
+        fields:
+          - name: label
+            label: 上部ラベル
+            type: string
+            required: true
+          - name: copyLines
+            label: キャッチコピー（行ごと）
+            type: string
+            list: true
+            required: true
+          - name: lead
+            label: リード文
+            type: text
+            required: true
+          - name: primaryAction
+            label: 主ボタン
+            type: object
+            fields:
+              - name: label
+                label: ボタン文言
+                type: string
+                required: true
+              - name: href
+                label: リンク先 URL
+                type: string
+                required: true
+          - name: secondaryAction
+            label: 副ボタン
+            type: object
+            fields:
+              - name: label
+                label: ボタン文言
+                type: string
+                required: true
+              - name: href
+                label: リンク先 URL
+                type: string
+                required: true
+          - name: logo
+            label: ロゴ画像
+            type: object
+            fields:
+              - name: src
+                label: 画像ファイル
+                type: image
+                required: true
+                options:
+                  media: pages_images
+              - name: alt
+                label: 代替テキスト（alt）
+                type: string
+                required: true
+              - name: width
+                label: 幅（px）
+                type: number
+                required: true
+              - name: height
+                label: 高さ（px）
+                type: number
+                required: true
+      - name: newsSection
+        label: 新着情報セクション
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+          - name: moreLabel
+            label: 一覧ボタン文言
+            type: string
+            required: true
+          - name: moreHref
+            label: 一覧ボタン URL
+            type: string
+            required: true
+      - name: teamsSection
+        label: 3つの班セクション
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+          - name: teams
+            label: 班一覧
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{ja}（{en}）'
+            fields:
+              - name: en
+                label: 英字ラベル
+                type: string
+                required: true
+              - name: ja
+                label: 班名
+                type: string
+                required: true
+              - name: text
+                label: 説明文
+                type: text
+                required: true
+              - name: href
+                label: リンク先 URL
+                type: string
+                required: true
+      - name: band
+        label: 下部の強調帯（ご支援・お問い合わせ）
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+          - name: text
+            label: 本文
+            type: text
+            required: true
+          - name: actions
+            label: ボタン一覧
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{label}'
+            fields:
+              - name: label
+                label: ボタン文言
+                type: string
+                required: true
+              - name: href
+                label: リンク先 URL
+                type: string
+                required: true
+
+  - name: page_about
+    label: 固定ページ：ABOUT
+    type: file
+    path: src/data/pages/about.json
+    format: json
+    fields:
+      - name: heading
+        label: ページ見出し
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+      - name: history
+        label: 沿革セクション
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+          - name: logo
+            label: ロゴ画像
+            type: object
+            fields:
+              - name: src
+                label: 画像ファイル
+                type: image
+                required: true
+                options:
+                  media: pages_images
+              - name: alt
+                label: 代替テキスト（alt）
+                type: string
+                required: true
+              - name: width
+                label: 幅（px）
+                type: number
+                required: true
+              - name: height
+                label: 高さ（px）
+                type: number
+                required: true
+          - name: paragraphs
+            label: 本文段落
+            type: text
+            list: true
+            required: true
+          - name: recordsLink
+            label: 大会記録リンク文
+            type: object
+            fields:
+              - name: before
+                label: リンク前の文言
+                type: string
+                required: false
+              - name: linkText
+                label: リンク文言
+                type: string
+                required: true
+              - name: href
+                label: リンク先 URL
+                type: string
+                required: true
+              - name: after
+                label: リンク後の文言
+                type: string
+                required: false
+      - name: teams
+        label: 3つの班セクション
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+          - name: intro
+            label: 導入文
+            type: text
+            required: true
+          - name: items
+            label: 班一覧
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{ja}（{en}）'
+            fields:
+              - name: en
+                label: 英字ラベル
+                type: string
+                required: true
+              - name: ja
+                label: 班名
+                type: string
+                required: true
+              - name: text
+                label: 説明文
+                type: text
+                required: true
+      - name: joinAction
+        label: メンバー募集ボタン
+        type: object
+        fields:
+          - name: label
+            label: ボタン文言
+            type: string
+            required: true
+          - name: href
+            label: リンク先 URL
+            type: string
+            required: true
+
+  - name: page_join
+    label: 固定ページ：JOIN
+    type: file
+    path: src/data/pages/join.json
+    format: json
+    fields:
+      - name: heading
+        label: ページ見出し
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+      - name: lead
+        label: リード文
+        type: string
+        required: true
+      - name: paragraphs
+        label: 本文段落
+        type: text
+        list: true
+        required: true
+      - name: contactAction
+        label: 連絡先ボタン
+        type: object
+        fields:
+          - name: label
+            label: ボタン文言
+            type: string
+            required: true
+          - name: href
+            label: リンク先 URL
+            type: string
+            required: true
+      - name: poster
+        label: 募集ポスター画像
+        type: object
+        fields:
+          - name: src
+            label: 画像ファイル
+            type: image
+            required: true
+            options:
+              media: pages_images
+          - name: alt
+            label: 代替テキスト（alt）
+            type: string
+            required: true
+          - name: width
+            label: 幅（px）
+            type: number
+            required: true
+          - name: height
+            label: 高さ（px）
+            type: number
+            required: true
+      - name: activitySection
+        label: 活動内容セクション
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+          - name: before
+            label: 最初の文言
+            type: string
+            required: false
+          - name: aboutLabel
+            label: ABOUT リンク文言
+            type: string
+            required: true
+          - name: aboutHref
+            label: ABOUT リンク先 URL
+            type: string
+            required: true
+          - name: middle
+            label: リンク間の文言
+            type: string
+            required: false
+          - name: newsLabel
+            label: NEWS リンク文言
+            type: string
+            required: true
+          - name: newsHref
+            label: NEWS リンク先 URL
+            type: string
+            required: true
+          - name: after
+            label: 末尾の文言
+            type: string
+            required: false
+      - name: contactSection
+        label: 連絡先・活動場所セクション
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+          - name: linkLabel
+            label: リンク文言
+            type: string
+            required: true
+          - name: href
+            label: リンク先 URL
+            type: string
+            required: true
+          - name: after
+            label: リンク後の文言
+            type: string
+            required: false
+
+  - name: page_sponsor
+    label: 固定ページ：SPONSOR
+    type: file
+    path: src/data/pages/sponsor.json
+    format: json
+    fields:
+      - name: heading
+        label: ページ見出し
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+      - name: lead
+        label: リード文
+        type: string
+        required: true
+      - name: sponsors
+        label: 協賛企業一覧（五十音順）
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{name}'
+        fields:
+          - name: name
+            label: 企業名（正式名称＋「様」）
+            type: string
+            required: true
+          - name: logo
+            label: ロゴ画像
+            type: image
+            required: true
+            options:
+              media: pages_images
+      - name: orderNote
+        label: 掲載順の注記
+        type: string
+        required: true
+      - name: supportSection
+        label: ご支援のお問い合わせセクション
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+          - name: before
+            label: リンク前の文言
+            type: string
+            required: false
+          - name: linkLabel
+            label: リンク文言
+            type: string
+            required: true
+          - name: linkHref
+            label: リンク先 URL
+            type: string
+            required: true
+          - name: after
+            label: リンク後の文言
+            type: string
+            required: false
+          - name: actionLabel
+            label: ボタン文言
+            type: string
+            required: true
+          - name: actionHref
+            label: ボタン URL
+            type: string
+            required: true
+
+  - name: page_contact
+    label: 固定ページ：CONTACT
+    type: file
+    path: src/data/pages/contact.json
+    format: json
+    fields:
+      - name: heading
+        label: ページ見出し
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+      - name: linksSection
+        label: 公式リンクセクション見出し
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+      - name: links
+        label: 公式リンク / SNS 一覧
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{name}'
+        fields:
+          - name: name
+            label: 名称
+            type: string
+            required: true
+          - name: href
+            label: リンク先 URL（メールは mailto:...）
+            type: string
+            required: true
+          - name: label
+            label: 表示ラベル（アドレスや @ID）
+            type: string
+            required: true
+          - name: note
+            label: 説明文
+            type: text
+            required: true
+      - name: recruitNote
+        label: 新規部員募集の案内文
+        type: text
+        required: true
+      - name: accessSection
+        label: アクセスセクション見出し
+        type: object
+        fields:
+          - name: en
+            label: 英字見出し
+            type: string
+            required: true
+          - name: ja
+            label: 日本語見出し
+            type: string
+            required: true
+      - name: addressLines
+        label: 住所（行ごと）
+        type: string
+        list: true
+        required: true
+      - name: campusMap
+        label: キャンパスマップ画像
+        type: object
+        fields:
+          - name: src
+            label: 画像ファイル
+            type: image
+            required: true
+            options:
+              media: pages_images
+          - name: alt
+            label: 代替テキスト（alt）
+            type: string
+            required: true
+          - name: width
+            label: 幅（px）
+            type: number
+            required: true
+          - name: height
+            label: 高さ（px）
+            type: number
+            required: true
+      - name: googleMap
+        label: Google マップ埋め込み
+        type: object
+        fields:
+          - name: title
+            label: iframe タイトル
+            type: string
+            required: true
+          - name: embedUrl
+            label: 埋め込み URL
+            type: string
+            required: true

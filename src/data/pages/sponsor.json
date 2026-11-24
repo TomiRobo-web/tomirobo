@@ -1,0 +1,44 @@
+{
+  "heading": {
+    "en": "Sponsor",
+    "ja": "協賛について"
+  },
+  "lead": "皆様のご支援が我々の活動の励みになります",
+  "sponsors": [
+    {
+      "name": "Dassault Systèmes SolidWorks 様",
+      "logo": "/images/pages/sponsor-solidworks.png"
+    },
+    {
+      "name": "SMC株式会社 様",
+      "logo": "/images/pages/sponsor-smc.png"
+    },
+    {
+      "name": "STマイクロエレクトロニクス 様",
+      "logo": "/images/pages/sponsor-st.png"
+    },
+    {
+      "name": "有限会社沖商店 様",
+      "logo": "/images/pages/sponsor-oki-shouten.png"
+    },
+    {
+      "name": "北越商工株式会社 様",
+      "logo": "/images/pages/sponsor-hokuetsu-shoko.png"
+    },
+    {
+      "name": "北陽電機株式会社 様",
+      "logo": "/images/pages/sponsor-hokuyo.png"
+    }
+  ],
+  "orderNote": "(五十音順)",
+  "supportSection": {
+    "en": "Support",
+    "ja": "ご支援のお問い合わせ",
+    "before": "ご協賛・ご支援に関するご連絡は ",
+    "linkLabel": "CONTACT",
+    "linkHref": "/contact/",
+    "after": " の公式メールアドレスまでお願いいたします。",
+    "actionLabel": "お問い合わせ先を見る",
+    "actionHref": "/contact/"
+  }
+}

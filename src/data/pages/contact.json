@@ -1,0 +1,58 @@
+{
+  "heading": {
+    "en": "Contact",
+    "ja": "お問い合わせ"
+  },
+  "linksSection": {
+    "en": "Links",
+    "ja": "公式リンク / SNS"
+  },
+  "links": [
+    {
+      "name": "TomiRobo 公式メールアドレス",
+      "href": "mailto:toyamarobocon@gmail.com",
+      "label": "toyamarobocon@gmail.com",
+      "note": "イベント勧誘のお問い合わせやスポンサー企業様のご連絡などはこちらへ！"
+    },
+    {
+      "name": "公式 X（Twitter）アカウント",
+      "href": "https://twitter.com/TomiRoboProject",
+      "label": "@TomiRoboProject",
+      "note": "大会の速報や、渉外・広報的なお知らせを広く発信しています！"
+    },
+    {
+      "name": "日常 X（Twitter）アカウント",
+      "href": "https://twitter.com/TomiRobo_diary",
+      "label": "@TomiRobo_diary",
+      "note": "部室の様子や開発の裏側など、活動の日常をフランクに発信しています！"
+    },
+    {
+      "name": "公式 Instagram アカウント",
+      "href": "https://www.instagram.com/tomirobo_project/",
+      "label": "@tomirobo_project",
+      "note": "渉外・広報的なお知らせを主に学生向けに発信しています！"
+    }
+  ],
+  "recruitNote": "新規部員も募集中！メールはもちろん、各種SNSのDMでも受け付けています！まずは気軽に連絡してください！",
+  "accessSection": {
+    "en": "Access",
+    "ja": "活動場所 / アクセス"
+  },
+  "addressLines": [
+    "〒930-8555",
+    "富山県富山市五福3190",
+    "富山大学 五福キャンパス 工学部",
+    "創造工学センター",
+    "ロボコンプロジェクトルーム"
+  ],
+  "campusMap": {
+    "src": "/images/pages/campus-map.png",
+    "alt": "五福キャンパス工学部周辺の地図（創造工学センターの位置）",
+    "width": 190,
+    "height": 289
+  },
+  "googleMap": {
+    "title": "創造工学センターの地図",
+    "embedUrl": "https://maps.google.com/maps?hl=ja&ll=36.694471,137.186591&q=36.694213,137.185749&z=18&output=embed"
+  }
+}

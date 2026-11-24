@@ -1,0 +1,40 @@
+{
+  "heading": {
+    "en": "Join",
+    "ja": "メンバー募集"
+  },
+  "lead": "新入部員大募集中！",
+  "paragraphs": [
+    "学部、学科、経験等問いません。文系でも問題なし！",
+    "ロボコンに興味がある方、ロボットが好きな方、モノづくりをしてみたい方、などなど少しでも興味がある方は、創造工学センターを直接訪ねる、あるいはメールや各種SNSのDMにてお気軽にお問い合わせください！",
+    "メールはもちろん、各種SNSのDMでも受け付けています！まずは気軽に連絡してください！"
+  ],
+  "contactAction": {
+    "label": "連絡先を見る",
+    "href": "/contact/"
+  },
+  "poster": {
+    "src": "/images/pages/recruit-poster.png",
+    "alt": "新入部員募集のポスター",
+    "width": 1435,
+    "height": 992
+  },
+  "activitySection": {
+    "en": "Activity",
+    "ja": "活動内容",
+    "before": "班ごとの活動は ",
+    "aboutLabel": "ABOUT",
+    "aboutHref": "/about/",
+    "middle": "、これまでの活動は ",
+    "newsLabel": "NEWS",
+    "newsHref": "/news/",
+    "after": " をご覧ください。"
+  },
+  "contactSection": {
+    "en": "Contact",
+    "ja": "連絡先・活動場所",
+    "linkLabel": "CONTACT",
+    "href": "/contact/",
+    "after": " をご覧ください。"
+  }
+}
