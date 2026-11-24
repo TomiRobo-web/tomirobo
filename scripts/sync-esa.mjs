@@ -12,14 +12,18 @@ const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const MAX_PAGES = 100;
 const MAX_REDIRECTS = 5;
 const TIMEOUT_MS = 60_000;
+// Cloudflare Workers Static Assets の上限（1ファイル 25 MiB）を超えないようにする
+const MAX_IMAGE_BYTES = 20 * 1024 * 1024;
 
-// esa の添付ファイルのホスト。画像の取得とトークンの送信はここだけに限る
+// esa の添付ファイルのホスト。本文中の画像のうち、ここにあるものだけを取り込む
 const ESA_IMAGE_HOSTS = new Set([
   'img.esa.io',
   'esa-storage-tokyo.s3-ap-northeast-1.amazonaws.com',
   'files.esa.io',
   'dl.esa.io',
 ]);
+// 画像の取得でトークンを送ってよいホスト。S3 は esa のサーバーではないので送らない
+const ESA_TOKEN_HOSTS = new Set(['img.esa.io', 'files.esa.io', 'dl.esa.io']);
 
 const EXT_BY_TYPE = {
   'image/png': 'png',
@@ -76,8 +80,13 @@ async function request(config, url, headers, label) {
   }
 }
 
+/** 検索条件の値。空白や記号で条件が分かれないよう、必要なときだけ引用符で囲む */
+function quoteSearchValue(value) {
+  return /[\s"'()|\\]/.test(value) ? `"${value.replace(/["\\]/g, '\\$&')}"` : value;
+}
+
 async function fetchPosts(config) {
-  const query = encodeURIComponent(`in:${config.category} wip:false`);
+  const query = encodeURIComponent(`in:${quoteSearchValue(config.category)} wip:false`);
   const posts = new Map(); // 取得中に更新されて2ページに重複した記事は1件にまとめる
   for (let page = 1; page <= MAX_PAGES; page++) {
     const url = `${config.apiBase}/v1/teams/${encodeURIComponent(config.team)}/posts?q=${query}&per_page=100&page=${page}&sort=updated&order=desc`;
@@ -122,13 +131,14 @@ function esaImageUrl(raw) {
   return url.href;
 }
 
+/** 画像を取得し、応答と転送後の URL を返す */
 async function requestImage(config, startUrl, withToken, label) {
   let url = new URL(startUrl);
   for (let i = 0; i <= MAX_REDIRECTS; i++) {
-    const headers = withToken && ESA_IMAGE_HOSTS.has(url.host) ? { Authorization: `Bearer ${config.token}` } : {};
+    const headers = withToken && ESA_TOKEN_HOSTS.has(url.host) ? { Authorization: `Bearer ${config.token}` } : {};
     const res = await request(config, url.href, headers, label);
     const location = res.status >= 300 && res.status < 400 ? res.headers.get('location') : null;
-    if (!location) return res;
+    if (!location) return { res, finalUrl: url.href };
     await res.body?.cancel();
     url = new URL(location, url);
     if (url.protocol !== 'https:') throw new Error(`${label}の転送先が https ではありません`);
@@ -144,24 +154,46 @@ function imageExtension(url, contentType) {
   return Object.hasOwn(URL_EXTS, ext) ? URL_EXTS[ext] : null;
 }
 
+/** 応答の本文を読む。上限を超えたら残りを受信せずに中止する */
+async function readImage(res, label) {
+  const tooLarge = () => new Error(`${label}が大きすぎます（上限 ${MAX_IMAGE_BYTES / 1024 / 1024} MiB）`);
+  if (Number(res.headers.get('content-length')) > MAX_IMAGE_BYTES) {
+    await res.body?.cancel();
+    throw tooLarge();
+  }
+  const chunks = [];
+  let size = 0;
+  try {
+    for await (const chunk of res.body ?? []) {
+      size += chunk.byteLength;
+      if (size > MAX_IMAGE_BYTES) break; // ループを抜けると受信も止まる
+      chunks.push(chunk);
+    }
+  } catch (cause) {
+    throw new Error(`${label}の受信が途中で失敗しました: ${cause.message}`, { cause });
+  }
+  if (size > MAX_IMAGE_BYTES) throw tooLarge();
+  return Buffer.concat(chunks);
+}
+
 async function downloadImage(config, url, postNumber) {
   const { host, pathname } = new URL(url);
   // 署名付き URL の署名をログに残さないよう、クエリは表示しない
   const label = `記事 ${postNumber} の画像 https://${host}${pathname} `;
-  let res = await requestImage(config, url, false, label);
+  let { res, finalUrl } = await requestImage(config, url, false, label);
   if (res.status === 401 || res.status === 403) {
     await res.body?.cancel();
-    res = await requestImage(config, url, true, label);
+    ({ res, finalUrl } = await requestImage(config, url, true, label));
   }
   if (!res.ok) throw new Error(`${label}を取得できません: HTTP ${res.status}`);
   const type = res.headers.get('content-type');
-  const ext = imageExtension(url, type);
-  if (!ext) throw new Error(`${label}は対応していない形式です（Content-Type: ${type ?? 'なし'}）`);
-  try {
-    return { ext, data: Buffer.from(await res.arrayBuffer()) };
-  } catch (cause) {
-    throw new Error(`${label}の受信が途中で失敗しました: ${cause.message}`, { cause });
+  // 転送後の URL に拡張子がなければ、本文に書かれた URL の拡張子を使う
+  const ext = imageExtension(finalUrl, type) ?? imageExtension(url, type);
+  if (!ext) {
+    await res.body?.cancel();
+    throw new Error(`${label}は対応していない形式です（Content-Type: ${type ?? 'なし'}）`);
   }
+  return { ext, data: await readImage(res, label) };
 }
 
 /** 本文中の esa 画像を取得し、サイト内の画像に置き換えた本文を返す */

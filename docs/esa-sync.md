@@ -85,6 +85,7 @@ esa の Owner が、アクセストークンの読める範囲を絞れるか確
 | `HTTP 429` / `HTTP 5xx` | esa 側の制限か障害。時間をおいて実行し直す |
 | `公開対象の記事が0件` | カテゴリ名（`ESA_PUBLIC_CATEGORY`）と、記事が WIP になっていないか |
 | 画像を取得できない・対応していない形式 | 記事の画像が esa で表示できるか。対応形式は png / jpeg / gif / webp / svg / avif |
+| 画像が大きすぎます | 1枚 20 MiB まで。esa 側で画像を縮小して差し替える |
 | PR が作られない | 手順2の「Allow GitHub Actions to create and approve pull requests」 |
 | 定期実行が止まった | 公開リポジトリは60日間動きがないと定期実行が止まる。Actions の画面で有効に戻す |
 

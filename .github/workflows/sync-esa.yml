@@ -104,7 +104,7 @@ jobs:
             git push --force-with-lease="refs/heads/$SYNC_BRANCH:$remote" origin "HEAD:refs/heads/$SYNC_BRANCH"
           fi
 
-          pr="$(gh pr list --head "$SYNC_BRANCH" --base main --state open --json number --jq '.[0].number // empty')"
+          pr="$(gh pr list --head "$SYNC_BRANCH" --base main --state open --json number,isCrossRepository --jq 'map(select(.isCrossRepository == false))[0].number // empty')"
           if [ -n "$pr" ]; then
             echo "既存のプルリクエスト #$pr に反映済みです"
           else
@@ -124,7 +124,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          pr="$(gh pr list --head "$SYNC_BRANCH" --base main --state open --json number --jq '.[0].number // empty')"
+          pr="$(gh pr list --head "$SYNC_BRANCH" --base main --state open --json number,isCrossRepository --jq 'map(select(.isCrossRepository == false))[0].number // empty')"
           if [ -n "$pr" ]; then
             gh pr close "$pr" --delete-branch --comment 'esa の内容が main と同じになったため、自動で閉じました。'
           fi

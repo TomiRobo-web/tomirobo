@@ -21,8 +21,8 @@ async function setup(t) {
       state.requests.push({ key, auth });
       const image = state.images[key];
       if (!image) return res.writeHead(404).end();
-      if (image.location) return res.writeHead(302, { location: image.location }).end();
       if (image.private && auth !== `Bearer ${TOKEN}`) return res.writeHead(401).end();
+      if (image.location) return res.writeHead(302, { location: image.location }).end();
       return res.writeHead(200, image.type ? { 'content-type': image.type } : {}).end(image.data);
     }
     state.requests.push({ key: url.pathname, auth, params: url.searchParams });
@@ -294,4 +294,105 @@ test('エラー耐性: 取得に失敗したら既存の記事・画像を変え
   assert.deepEqual(await take(), before);
   const moved = state.requests.filter((r) => r.key === 'cdn.example.com/moved.png');
   assert.deepEqual(moved.map((r) => r.auth), [undefined, undefined]);
+});
+
+test('トークンの送信先: S3 には、直接の取得でも転送でも送らない', async (t) => {
+  const { state, sync, snapshot: take, readImage } = await setup(t);
+  const s3 = 'esa-storage-tokyo.s3-ap-northeast-1.amazonaws.com';
+  const auths = (key) => state.requests.filter((r) => r.key === key).map((r) => r.auth);
+
+  // esa のホストは 401 のあとトークン付きで再試行し、転送先の S3 には送らない
+  const hosts = ['img.esa.io', 'files.esa.io', 'dl.esa.io'];
+  for (const host of hosts) {
+    state.images[`${host}/private`] = { private: true, location: `https://${s3}/${host}.png?signature=x` };
+    state.images[`${s3}/${host}.png`] = png(`S3 ${host}`);
+  }
+  state.pages = [[post(1, { body_md: hosts.map((host) => `![](https://${host}/private)`).join('\n') })]];
+  await sync();
+  for (const [i, host] of hosts.entries()) {
+    assert.deepEqual(auths(`${host}/private`), [undefined, `Bearer ${TOKEN}`]);
+    assert.deepEqual(auths(`${s3}/${host}.png`), [undefined]);
+    assert.equal(await readImage(`esa-1-${i + 1}.png`), `S3 ${host}`);
+  }
+  const before = await take();
+
+  // S3 の URL が直接書かれていて 401 になっても送らない
+  state.images[`${s3}/direct.png`] = { private: true, data: '' };
+  state.pages = [[post(1, { body_md: `![](https://${s3}/direct.png)` })]];
+  await assert.rejects(sync(), /HTTP 401/);
+
+  // S3 を経由して esa 以外へ転送されても、S3 と転送先には送らない
+  state.images['files.esa.io/chain'] = { private: true, location: `https://${s3}/chain` };
+  state.images[`${s3}/chain`] = { location: 'https://cdn.example.com/chain.png' };
+  state.images['cdn.example.com/chain.png'] = { private: true, data: '' };
+  state.pages = [[post(1, { body_md: '![](https://files.esa.io/chain)' })]];
+  await assert.rejects(sync(), /HTTP 401/);
+  assert.deepEqual(auths('files.esa.io/chain'), [undefined, `Bearer ${TOKEN}`]);
+  assert.deepEqual(auths(`${s3}/chain`), [undefined]);
+  assert.deepEqual(auths('cdn.example.com/chain.png'), [undefined]);
+
+  assert.deepEqual(await take(), before);
+  assert.ok(state.requests.filter((r) => r.key.startsWith(`${s3}/`)).every((r) => r.auth === undefined));
+});
+
+test('画像の種類: Content-Type で分からなければ、転送後の URL の拡張子を使う', async (t) => {
+  const { state, sync, readImage, imageDir } = await setup(t);
+  const s3 = 'esa-storage-tokyo.s3-ap-northeast-1.amazonaws.com';
+  state.images = {
+    'files.esa.io/noext': { location: `https://${s3}/uploads/real.png?signature=x` },
+    [`${s3}/uploads/real.png`]: { type: 'application/octet-stream', data: 'PNG' },
+    // 転送後の URL に拡張子がないときは、本文に書かれた URL の拡張子
+    'files.esa.io/photo.jpeg': { location: `https://${s3}/uploads/noext` },
+    [`${s3}/uploads/noext`]: { type: 'binary/octet-stream', data: 'JPEG' },
+  };
+  state.pages = [[post(1, { body_md: '![](https://files.esa.io/noext)\n![](https://files.esa.io/photo.jpeg)' })]];
+  await sync();
+  assert.deepEqual((await readdir(imageDir)).sort(), ['esa-1-1.png', 'esa-1-2.jpg']);
+  assert.equal(await readImage('esa-1-1.png'), 'PNG');
+  assert.equal(await readImage('esa-1-2.jpg'), 'JPEG');
+});
+
+test('画像の大きさ: 20 MiB を超えたら中止する', async (t) => {
+  const { state, sync, readPost, imageDir } = await setup(t);
+  const limit = 20 * 1024 * 1024;
+  const withImage = (body, headers = {}) => ({
+    fetch: (input, init) => (new URL(input).host === 'img.esa.io'
+      ? new Response(body, { headers: { 'content-type': 'image/png', ...headers } })
+      : fetch(input, init)),
+  });
+  state.pages = [[post(1, { body_md: '![](https://img.esa.io/p.png)' })]];
+  await sync(withImage(Buffer.alloc(limit)));
+  const size = async () => (await readFile(join(imageDir, 'esa-1-1.png'))).length;
+  assert.equal(await size(), limit);
+  const before = await readPost(1);
+
+  state.pages = [[post(1, { body_md: '更新後\n![](https://img.esa.io/p.png)' })]];
+  const cases = [
+    withImage('小さい本文', { 'content-length': String(limit + 1) }), // Content-Length が上限を超える
+    withImage(Buffer.alloc(limit + 1)), // Content-Length がない
+    withImage(Buffer.alloc(limit + 1), { 'content-length': '10' }), // Content-Length が実際より小さい
+  ];
+  for (const extra of cases) {
+    await assert.rejects(sync(extra), /大きすぎます（上限 20 MiB）/);
+    assert.equal(await size(), limit);
+    assert.equal(await readPost(1), before);
+  }
+});
+
+test('検索条件: 空白や記号を含むカテゴリ名は引用符で囲む', async (t) => {
+  const { state, sync } = await setup(t);
+  const cases = [
+    ['公開用', 'in:公開用 wip:false'],
+    ['公開用/技術ブログ', 'in:公開用/技術ブログ wip:false'],
+    ['Public Posts', 'in:"Public Posts" wip:false'],
+    ['公開　用', 'in:"公開　用" wip:false'],
+    ['公開用(web)', 'in:"公開用(web)" wip:false'],
+    ['a "b" \\c', 'in:"a \\"b\\" \\\\c" wip:false'],
+  ];
+  for (const [category, query] of cases) {
+    state.requests = [];
+    state.pages = [[post(1, { category })]];
+    assert.deepEqual((await sync({ category })).posts, ['esa-1.md']);
+    assert.equal(state.requests[0].params.get('q'), query);
+  }
 });
